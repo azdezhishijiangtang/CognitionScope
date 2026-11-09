@@ -18,10 +18,10 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 配置 Node.js 20
+      - name: 配置 Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: 逐文件语法检查
         run: npm run check
