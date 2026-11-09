@@ -1,0 +1,42 @@
+name: Deploy GitHub Pages
+
+# 每次推送到 main 即自动发布；也可在 Actions 页面手动触发。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 校验全部 JS 语法（零构建站点的轻量门禁）
+        run: npm run check
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      # 项目无构建步骤，仓库根目录即站点根目录（index.html + js/）。
+      - name: 上传静态站点
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

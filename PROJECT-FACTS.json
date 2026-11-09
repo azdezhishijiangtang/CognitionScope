@@ -1,0 +1,136 @@
+{
+  "appVersion": "11.0.0",
+  "releaseLine": "Demo Content Pack & Structure",
+  "l1Schema": 4,
+  "l2Schema": 6,
+  "algorithmVersions": {
+    "_note": "算法与定义版本会写进冻结预测、审计事件和导出包，不随应用版本重编号。改动会让已有数据不可比，因此 v8 沿用 7.x 系列。",
+    "params": "params/7.0",
+    "calibration": "calibration/7.0",
+    "consent": "consent/7.0",
+    "paramVersionInitial": "v7-init",
+    "paramVersionFitPrefix": "v7-fit"
+  },
+  "suites": {
+    "_note": "tests/run-all.js 的唯一调度清单，顺序即依赖顺序。测试文件与目录名中的 v3/v5/v6/v7 是历史资产命名，不代表当前应用版本。",
+    "logic": [
+      "test.data.js",
+      "test.measurement.js",
+      "test.calibration.js",
+      "test.experiments.js",
+      "test.ui.v6.js",
+      "test.v7-privacy.js",
+      "test.stream.js",
+      "test.search.js",
+      "test.snapshots.js",
+      "test.integrity.js",
+      "test.sensitivity.js",
+      "test.sced.js",
+      "test.replay.js",
+      "test.v9-contracts.js",
+      "test.plain.js",
+      "test.demo.js"
+    ],
+    "legacy": [
+      "verify.js",
+      "smoke.js",
+      "v5.integration.js"
+    ],
+    "docs": "test.docs-consistency.js",
+    "browser": "browser-check.js"
+  },
+  "privacy": {
+    "apiKeyStorage": "page-memory-only",
+    "fetchOnlyIn": [
+      "js/ai.js"
+    ],
+    "consentGateway": "none-fail-closed-stub",
+    "allowedHosts": [
+      "open.bigmodel.cn",
+      "api.deepseek.com",
+      "api.openai.com",
+      "localhost",
+      "127.0.0.1"
+    ],
+    "cspConnectSources": 5,
+    "fetchNote": "运行时代码仅 js/ai.js 发起 fetch；tests/browser-check.js 的生成探针中有一次故意的非白名单 fetch，仅用于 CSP 阻断对照"
+  },
+  "manual": {
+    "generator": "tools/build-manual.js",
+    "intro": "tools/manual-intro.md",
+    "output": "完整代码手册.md"
+  },
+  "v9Modules": [
+    "stream",
+    "search",
+    "snapshots",
+    "integrity",
+    "sensitivity",
+    "sced",
+    "replay",
+    "v9ui"
+  ],
+  "v9TestFiles": [
+    "test.stream.js",
+    "test.search.js",
+    "test.snapshots.js",
+    "test.integrity.js",
+    "test.sensitivity.js",
+    "test.sced.js",
+    "test.replay.js",
+    "test.v9-contracts.js"
+  ],
+  "capabilities": {
+    "streaming": "SSE 增量解析 + UTF-8 跨块 + CRLF + 429/5xx 退避重试 + 取消",
+    "search": "本地倒排索引 / BM25 / 中英文混合分词 / 确定性图谱布局",
+    "snapshots": "环形快照 / 结构化 diff / 仅 L1 原子回滚（L2 不回滚）",
+    "replay": "导出包只读回放 / manifest 复算 / 脱敏复核 / 差异报告",
+    "integrity": "Web Crypto HMAC-SHA256 + PBKDF2 外部锚点（明确非防伪）",
+    "sensitivity": "缺失数据 best/worst 边界 + tipping point + 稳健性分级",
+    "sced": "N=1 随机化检验 / bootstrap CI / NAP / lag-1 自相关",
+    "browserProbe": "真实 CSP 外连对照 + 运行时能力自检（非跨浏览器矩阵）",
+    "plainLanguage": "16 页白话说明卡 + 75+ 条术语词典 + 导览首页 + 名词解释页 + 通俗说明开关（不改变任何计算逻辑）",
+    "navigation": "日常/进阶两组导航常驻可见 + 每个页签带白话副标题（v9 的隐藏研究层已取消）",
+    "demoContent": "46 条原创示例条目 / 80 条先验边 / 7 类学科词表 / 9 类错因 / 分层提示 / 显式载入与一键清除 / 全站演示模式横幅",
+    "demoIsolation": "demo:true + demoVersion + source 三标记；不计入经验正确率、PCM、导出包；清除只删演示条目"
+  },
+  "v10Modules": [
+    "glossary",
+    "plain"
+  ],
+  "v10Pages": [
+    "home",
+    "glossary"
+  ],
+  "v11Modules": [
+    "demo",
+    "demo-ui"
+  ],
+  "v11Pages": [
+    "demo"
+  ],
+  "demoContent": {
+    "packVersion": "demo/11.0",
+    "itemCount": 46,
+    "edgeCount": 80,
+    "domains": 7,
+    "errorTypes": 9,
+    "defaultEnabled": false,
+    "origin": "本项目原创编写",
+    "attributionFile": "ATTRIBUTION.md",
+    "excludedFrom": [
+      "CS.fitParams",
+      "CS.buildPCM",
+      "CS.exportJSON",
+      "EXPORTM.buildBundle"
+    ],
+    "note": "示例内容可出现在复习队列 / 未来负荷图 / 知识网络供功能试用，但不构成个人学习证据，也不是认知能力常模。"
+  },
+  "plainLanguage": {
+    "guidePages": 16,
+    "glossaryMin": 60,
+    "defaultOn": true,
+    "modeKey": "cogscope_v10_plain",
+    "note": "每个功能页顶部注入白话说明卡；16 页全覆盖；说明引用的术语必须在词典中登记，由 test.plain.js 校验。modeKey 沿用 v10 键名以免用户开关状态丢失。"
+  }
+}

@@ -1,0 +1,31 @@
+name: CI
+
+# 全量回归测试独立运行，不阻塞 Pages 发布。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 逐文件语法检查
+        run: npm run check
+
+      # run-all.js 按 PROJECT-FACTS.json 调度，检测到 Chromium 时自动纳入真实浏览器检查。
+      - name: 全量回归测试
+        run: npm test

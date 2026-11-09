@@ -1,0 +1,22 @@
+{
+  "name": "cognitionscope",
+  "version": "11.0.0",
+  "description": "CognitionScope v11 · 普通人能看懂的专业级个人学习观测平台（示例内容包 / 学科词表 / 先验知识网络 / 白话说明层）",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node tests/run-all.js",
+    "test:legacy": "node tests/verify.js && node tests/smoke.js && node tests/v5.integration.js",
+    "test:browser": "node tests/browser-check.js",
+    "test:docs": "node tests/test.docs-consistency.js",
+    "build:manual": "node tools/build-manual.js",
+    "check": "for f in js/*.js tests/*.js tools/*.js; do node --check \"$f\" || exit 1; done",
+    "test:plain": "node tests/test.plain.js",
+    "test:demo": "node tests/test.demo.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "notes": "纯前端、零运行时依赖、无构建步骤；双击 index.html 即可离线运行。文档事实以 PROJECT-FACTS.json 为准，手册由 npm run build:manual 生成。v11 新增默认零写入的原创示例内容包与分类/先验结构，并在导出与统计入口统一排除演示数据；L1/L2 schema、算法定义版本、CSP 白名单与 AI 外发边界均不变。"
+}

@@ -1,0 +1,12 @@
+"use strict";
+const H=require("./harness"),{createHarness,setupEnv,loadLogic}=H;const {t,ta,ok,eq,throws,done}=createHarness("test.v7-privacy.js");
+setupEnv();const W=loadLogic();const {CS,AI,CS6,PARAMS,CAL,CONSENT}=W;CS.load();CS6.load();
+t("AI 请求只含固定系统提示和手动通用问题",()=>{CS.state.profile={name:"PRIVATE-NAME"};CS.state.items=[{id:"PRIVATE-ID",content:"PRIVATE-CONTENT",reviews:[{grade:3}]}];const q=AI.buildRequest("解释间隔重复的理论基础",{endpoint:"https://api.deepseek.com/chat/completions",model:"deepseek-chat",key:"sk-private"});const body=JSON.stringify(q.body);ok(body.includes("解释间隔重复"));for(const x of ["PRIVATE-NAME","PRIVATE-ID","PRIVATE-CONTENT","reviews"])ok(!body.includes(x),"request leak: "+x);ok(q.headers.Authorization==="Bearer sk-private");});
+t("AI 请求拒绝疑似邮箱、电话、身份证及个人资料",()=>{for(const q of ["email a@b.com","phone +886 912 345 678","身份证: 123456789012345678","我的学习记录如下"])throws(()=>AI.validateResearchPrompt(q),/隐私保护拦截/);});
+ta("个人数据 AI 功能全部 fail-closed",async()=>{for(const fn of [AI.healthReport,AI.socratic,AI.parseInput,AI.planDecorate,AI.generateHypothesis]){let blocked=false;try{await fn("personal");}catch(e){blocked=/已关闭/.test(e.message);}ok(blocked);}});
+t("旧版全局 consent 不能重新开放个人数据外发",()=>{eq(AI.setConsent(true).ok,false);ok(!CONSENT.FEATURES.healthReport);});
+t("旧版 localStorage 中的 API Key 不会进入请求头",()=>{CS.state.aiCfg={provider:"openai",key:"persisted-secret"};const r=AI.buildRequest("通用研究问题");ok(!r.headers.Authorization);});
+t("L2 append 持久化失败必须回滚内存",()=>{const old=global.localStorage.setItem;global.localStorage.setItem=()=>{const e=new Error("quota exceeded");e.name="QuotaExceededError";throw e;};const before=CS6.snapshot().audit.length;const r=CS6.append("audit",{action:"should-rollback"});eq(r.ok,false);eq(CS6.snapshot().audit.length,before);global.localStorage.setItem=old;});
+t("阈值前沿明确不识别反事实",()=>{const x=CAL.thresholdFrontier([{r:.8,y:1},{r:.7,y:0}]);ok(x.rows.every(r=>r.counterfactualIdentified===false));});
+t("参数拟合版本标记为 v7",()=>{eq(PARAMS.VERSION,"params/7.0");});
+t("缺失或排除事件仍留在随机分配分析分母",()=>{const e=[{experimentId:"e",itemId:"i",conditionId:"A",excluded:true,value:null},{experimentId:"e",itemId:"i",conditionId:"B",value:1}];const a=W.EXP.adherenceReport(e);eq(a.ittN,2);eq(a.excluded,1);const p=W.EXP.ittPairs(e);eq(p.incomplete.length,1);});done();
