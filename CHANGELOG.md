@@ -1,5 +1,31 @@
 # CognitionScope · Release Notes
 
+## 界面更新 · 日光 / 月光双主题 + 许可声明
+
+### 新增
+
+- **`js/theme.js`** —— 主题引导模块（`window.THEME`）。在 `<head>` 中同步执行，先于首屏绘制落定 `<html data-theme>`，因此不会出现「先深后浅」的闪烁；CSP 仍为 `script-src 'self'`，无内联脚本、无新增外连。
+  - 三级回退：`localStorage` 显式选择 → `prefers-color-scheme` → 月光兜底；未手动选择时系统外观变化会实时跟随。
+  - 持久化只写独立键 `cognitionscope-theme`，不进入 L1/L2、不进导出包、不参与任何统计口径。
+  - `THEME.get() / set() / toggle() / followSystem() / isLight()` 可供其他模块调用；切换时派发 `cs:theme` 事件。
+- **顶栏主题切换器** —— 月亮 / 太阳双图标胶囊，当前模式高亮，`role="switch"` + `aria-checked` + 动态 `aria-label`；窄屏只留图标。同步更新 `meta[name=theme-color]`，移动端地址栏跟着变色。
+- **`LICENSE`** —— 版权与使用限制声明（中英双语）：保留所有权利，不适用 MIT / GPL / Apache-2.0 等任何开源协议；明确禁止复制、转载、复用、牟利与篡改署名。README 新增「许可与版权」章节并在开头给出醒目提示，手册镜像同步收录该文件。
+
+### 视觉系统 v4「Nocturne / Daybreak」
+
+- 全站颜色改为**语义令牌**：叠加层（`--lift-*`）、描边（`--line*`）、表面渐变（`--card-grad` / `--panel-grad` / `--guide-grad`）、主视觉（`--hero-*`）各自成套，换肤只切 `<html data-theme>`，不改任何 `js/*.js`。
+- **月光**：保持暖黑曜石 + 熔岩橙，仅做令牌化重构，观感不变。**日光**：暖纸白底（`#F7F5F1`）+ 赤陶橙主色（`#D9501A`）+ 纯白卡片 + 柔和低对比阴影；主视觉改为暖白渐变面板，文字转深，橙色柔光与网格纹理保留。
+- 语义色在浅色下重新校准（绿 `#0B8A5B` / 琥珀 `#A26B06` / 红 `#C23A2C`），保证白底对比度；按钮改为深橙渐变 + 白字，徽章、标签、分段控件、表单、表格、浮层、页脚全部随主题联动。
+- 主题切换带 0.28s 过渡，并遵守 `prefers-reduced-motion`。
+
+### 连带调整
+
+- `tests/browser-check.js`：脚本数与模块装载断言同步到 39，并把 `THEME` 纳入模块自检。
+- `tools/build-manual.js`：`LICENSE` 纳入《完整代码手册》镜像清单。
+- 全部 18 页在两种主题下逐一截图核查，无横向溢出、无对比度不足；全量回归保持全绿。
+
+---
+
 ## v11.0.0 · 打开就有东西可看（Demo Content Pack & Structure）
 
 ### 核心目标

@@ -10,7 +10,7 @@ const facts = JSON.parse(fs.readFileSync(path.join(ROOT, "PROJECT-FACTS.json"), 
 
 const ROOT_FILES = [
   "index.html", "package.json", "PROJECT-FACTS.json",
-  "README.md", "CHANGELOG.md", "SECURITY-PRIVACY.md", "ATTRIBUTION.md"
+  "README.md", "CHANGELOG.md", "SECURITY-PRIVACY.md", "ATTRIBUTION.md", "LICENSE"
 ];
 const DIRS = ["js", "tests"];
 

@@ -41,7 +41,7 @@ try {
     for(var i=0;i<tabs.length;i++){var t=tabs[i];
       try{APP.go(t);var p=document.querySelector("#pane-"+t);out.push(t+":"+(p?p.innerHTML.length:0));}
       catch(e){out.push(t+":ERR:"+e.message);}}
-    var mods=["CS","CS6","PERSIST","IMPORTV","EXPORTM","VERIFY","TIMING","METRICS","LABM","CAL","PROBES","PARAMS","FORECAST","EXP","PROTO","HYP","CONSENT","STREAM","SEARCH","SNAP","INTEGRITY","SENS","SCED","REPLAY","E2","LAB","LABUI","OBS","REVIEW","CALUI","RESEARCH","AI","V9UI","DEMO","DEMOUI","GLOSSARY","PLAIN","APP"];
+    var mods=["THEME","CS","CS6","PERSIST","IMPORTV","EXPORTM","VERIFY","TIMING","METRICS","LABM","CAL","PROBES","PARAMS","FORECAST","EXP","PROTO","HYP","CONSENT","STREAM","SEARCH","SNAP","INTEGRITY","SENS","SCED","REPLAY","E2","LAB","LABUI","OBS","REVIEW","CALUI","RESEARCH","AI","V9UI","DEMO","DEMOUI","GLOSSARY","PLAIN","APP"];
     document.body.setAttribute("data-probe",out.join("|"));
     document.body.setAttribute("data-missing",mods.filter(function(k){return !window[k];}).join(",")||"none");
     document.body.setAttribute("data-chain",CS6.verifyChain().ok?"ok":"broken");
@@ -88,8 +88,8 @@ try {
   });
   t("工具层指标卡已渲染（未回退到纯 v3）", () => ok(dom.indexOf("工具层 · 高信息量指标") >= 0));
   t("18 个 pane 全部存在", () => ok((dom.match(/class="pane[^"]*" id="pane-/g) || []).length === 18));
-  t("38 个本地脚本全部按序加载", () => ok((dom.match(/<script src="js\//g) || []).length === 38));
-  t("38 个模块全部装载（无缺失）", () => {
+  t("39 个本地脚本全部按序加载", () => ok((dom.match(/<script src="js\//g) || []).length === 39));
+  t("39 个模块全部装载（无缺失）", () => {
     ok(attr("data-missing") === "none", "缺失：" + attr("data-missing"));
   });
   t("18 页切换均渲染出内容且无异常", () => {
